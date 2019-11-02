@@ -1,15 +1,18 @@
 import App from './App';
 import Login from './login';
 import Chat from './Chat';
-import LoginSelector from './login/login';
-import ErrorC from './error';
+import News from './News';
+import ErrorView from './error';
 import Header from './header';
+import Footer from './footer';
 
 export default {
   app : App.app,
+  footer : Footer,
+  news : News.news,
+  newsId : News.newsId,
   header : Header,
   chat : Chat.chat,
-  errorNotFound : ErrorC.NotFound,
+  errorNotFound : ErrorView.NotFound,
   login : Login,
-  loginSelector : LoginSelector
 }

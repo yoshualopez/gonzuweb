@@ -11,7 +11,7 @@ export default class Login extends Component {
       site: "",
       errorMessage: "",
       formEmail: null,
-      formPassword : null
+      formPassword: null
     };
     this.email = React.createRef();
     this.password = React.createRef();
@@ -23,116 +23,84 @@ export default class Login extends Component {
     e.preventDefault();
     this.validatorEmail();
     this.validatorPassword();
-    console.log(this.state.formPassword,this.state.formEmail)
     if (!this.state.formEmail || !this.state.formPassword) {
       return this.setState({
-        errorMessage: "Complete all fields empty."
+        errorMessage: "Completa todos los campos vacios."
       });
     }
-    const pathendpoint = this.state.site;
     const body = {
       email: this.email.value,
-      password: "uno"
+      password: this.password.value
     };
-    const headers = {
-      "UserAgent": "GonzuWeb",
-      "Access-Control-Allow-Origin": "*"
-    };
-    if (pathendpoint.indexOf("flia") !== -1) {
-      const endpoint = "loggin/flia";
-      const result = await component.net.post({
-        path: endpoint,
-        body,
-        headers
-      });
-      console.log(result);
-    }
-    if (pathendpoint.indexOf("teachers") !== -1) {
-      const endpoint = "loggin/teachers";
-      const result = await component.net.post({
-        path: endpoint,
-        body,
-        headers
-      });
-      console.log(result);
-    }
+    const headers = { UserAgent: "GonzuWeb"};
     const endpoint = "loggin";
-      const result = await component.net.post({
-        path: endpoint,
-        body,
-        headers
+    const response = await component.net.post(endpoint,body,headers);
+    console.log(response);
+    if(response.data.error.toString().length > 0){
+      return this.setState({
+        errorMessage: response.data.error
       });
-      console.log(result);
-    return;
-  };
-  componentDidMount() {
-    const path = this.props.match.path.replace("/login/", "");
-    this.props.route(path);
+    }
     return this.setState({
-      site: path
+      errorMessage: ""
     });
-  }
+  };
   validatorEmail = () => {
     const email = this.email.value;
     const isEmail = emailValidator(email);
-    if (isEmail) {
+    if (!isEmail) {
       return this.setState({
-        formEmail: true
+        formEmail: false
       });
     }
     return this.setState({
-      formEmail: false
+      formEmail: true
     });
   };
   validatorPassword = () => {
     const password = this.password.value;
-    const isCorrect = lengthValidator(password,{ min : 5 });
-    if(isCorrect){
+    const isCorrect = lengthValidator(password, { min: 5 });
+    if (!isCorrect) {
       return this.setState({
-        formPassword : true,
+        formPassword: false
       });
     }
     return this.setState({
-      formPassword : false,
+      formPassword: true
     });
-  }
+  };
   render() {
     let emailStatus;
     let passwordStatus;
-    let userTypeWelcome;
     if (this.state.formEmail === null || this.state.formEmail) {
       emailStatus = style.input;
     }
-    if(this.state.formPassword === null || this.state.formPassword){
-      passwordStatus = style.input
+    if (this.state.formPassword === null || this.state.formPassword) {
+      passwordStatus = style.input;
     }
-    if(this.state.formPassword === false){
-      passwordStatus = style.inputWrong
+    if (this.state.formPassword === false) {
+      passwordStatus = style.inputWrong;
     }
     if (this.state.formEmail === false) {
       emailStatus = style.inputWrong;
     }
-    if (this.state.site === "flia") {
-      userTypeWelcome = "Parents";
-    }
-    if (this.state.site === "teachers") {
-      userTypeWelcome = "Teachers";
-    }
     return (
-      <div>
-        <form spellCheck="false" onSubmit={this.formSubmit}>
-          <h1 style={style.title}>Login {userTypeWelcome}</h1>
-          <p style={style.fields}>Email</p>
+      <div className="my-5 container d-flex justify-content-center">
+        <form className="text-center" spellCheck="false" onSubmit={this.formSubmit}>
+          <h1>Ingresar</h1>
+          <p className="pt-3">Correo</p>
           <input
             onBlur={this.validatorEmail}
             onPaste={this.validatorEmail}
-            onChange={this.state.formEmail === false ? this.validatorEmail : null}
+            onChange={
+              this.state.formEmail === false ? this.validatorEmail : null
+            }
             style={emailStatus}
             ref={e => (this.email = e)}
             type="email"
-            placeholder="email"
+            placeholder="loren@ipsum.com"
           />
-          <p style={style.fields}>Password</p>
+          <p className="pt-3">Contrase&ntilde;a</p>
           <input
             onBlur={this.validatorPassword}
             onPaste={this.validatorPassword}
@@ -140,12 +108,19 @@ export default class Login extends Component {
             style={passwordStatus}
             ref={e => (this.password = e)}
             type="password"
-            placeholder="password"
+            placeholder="example**"
           />
-          {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
-          <button style={preset.button.buttonPrimary} type="submit">
-            Next
-          </button>
+
+          {this.state.errorMessage && 
+          <div className="mt-3 alert alert-warning">
+            <p className="mb-0">{this.state.errorMessage}</p>
+          </div>
+          }
+          <div className="text-center py-3">
+            <button className="btn" style={preset.button.buttonPrimary} type="submit">
+              Siguiente
+            </button>
+          </div>
         </form>
       </div>
     );
