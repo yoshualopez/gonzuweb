@@ -26,7 +26,7 @@ class ModalEditUser extends Component {
       //teacherTutor: ""
     };
     const header = {"x-access-token" : this.props.user.token };
-    await component.net.postwithToken(endpoint,body,header);
+    await component.net.post(endpoint,body,header);
     this.props.update();
     this.props.closeModal();
   }

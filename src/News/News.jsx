@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import template from "../templates";
 import component from "../components";
 import { NoticeItem } from "./templates";
-import PropTypes from "prop-types";
-
+import lang from "../lang";
+const utilNetworkGet = async amount => await component.net.get("/notices/" + amount);
 class News extends Component {
   constructor(props) {
     super(props);
@@ -13,29 +14,28 @@ class News extends Component {
   }
   componentDidMount = async () => this.getNews(4);
   getNews = async amount => {
-    let uri = "/notices/" + amount;
+    this.setState({ news: [] });
+    const response = await utilNetworkGet(amount);
+    if (response.isError) return;
     this.setState({
-      news: []
-    });
-    const response = await component.net.get({ path: uri });
-    if (!response) return;
-    this.setState({
-      news: response.data.response
+      news: response.data.data.response,
+      showMoreNewsButton: true
     });
   };
+
   moreNews = async amount => {
-    let uri = "/notices/" + amount;
-    const response = await component.net.get({ path: uri });
-    if (!response) return;
-    const continueShow = (this.state.news.length = response.data.response.length);
+    const response = await utilNetworkGet(amount);
+    if (response.isError) return;
+    const continueShow = this.state.news.length === response.data.data.response.length;
     return this.setState({
-      news: response.data.response,
+      news: response.data.data.response,
       showMoreNewsButton: !continueShow
     });
   };
   render() {
+    const defaultLanguajes = "es";
     const { news, showMoreNewsButton } = this.state;
-    if (news.length <= 0) {
+    if (news.length === 0 || !news) {
       return (
         <div className="m-5 text-center">
           <template.spinner />
@@ -46,7 +46,7 @@ class News extends Component {
       <div className="my-5 container">
         <div className="w-100 d-flex justify-content-center">
           <button onClick={() => this.getNews(4)} className="btn btn-outline-primary">
-            Recargar
+            {lang[defaultLanguajes].buttonReloadPageIndicator}
           </button>
         </div>
         <ul className="row navbar-nav flex-row justify-content-center">
@@ -57,7 +57,7 @@ class News extends Component {
         {showMoreNewsButton && (
           <div className="w-100 d-flex justify-content-center">
             <button onClick={() => this.moreNews(news.length + 4)} className="btn btn-link">
-              MAS
+              {lang[defaultLanguajes].buttonLoadMoreIndicator}
             </button>
           </div>
         )}

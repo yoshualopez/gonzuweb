@@ -9,10 +9,10 @@ class News extends Component {
   }
   async componentDidMount() {
     const uri = "/notice/" + this.props.match.params.id;
-    const response = await component.net.get({ path: uri });
+    const response = await component.net.get(uri);
     if (!response) return;
     this.setState({
-      news: response.data.response
+      news: response.data.data.response
     });
   }
   render() {
@@ -44,11 +44,11 @@ class News extends Component {
                   <img src="/ic_launcher.png" className="d-block w-100" alt="..." />
                 </div>
               </div>
-              <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <a className="carousel-control-prev" href="#a" role="button" data-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span className="sr-only">Previous</span>
               </a>
-              <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <a className="carousel-control-next" href="#a" role="button" data-slide="next">
                 <span className="carousel-control-next-icon" aria-hidden="true"></span>
                 <span className="sr-only">Next</span>
               </a>

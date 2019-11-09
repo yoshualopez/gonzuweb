@@ -2,23 +2,21 @@ import style from '../styles';
 export default {
   input : {
     border : 'none',
-    fontFamily :  style.font.monospace,
+    // fontFamily :  style.font.monospace,
     color : style.colors.blackSoft,
     borderRadius : style.radius.input,
-    padding : style.padding.inputText,
+    // padding : style.padding.inputText,
     background : style.background.white,
-    fontSize : style.fontSize.redactionMin,
     boxShadow : style.shadow.soft15,
     outline : 'none'
   },
   inputWrong : {
     border : 'none',
-    fontFamily :  style.font.monospace,
+    // fontFamily :  style.font.monospace,
     color : style.colors.danger,
     borderRadius : style.radius.input,
-    padding : style.padding.inputText,
+    // padding : style.padding.inputText,
     background : style.background.white,
-    fontSize : style.fontSize.redactionMin,
     boxShadow : style.shadow.soft15Danger,
     outline : 'none'
   },

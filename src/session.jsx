@@ -14,15 +14,14 @@ class AppValidation extends Component {
     this.state = { user: {}, connectionState: "connecting" };
   }
   async componentDidMount() {
-    const result = await component.auth.isLogged();
+    const userDataSession = await component.auth.isLogged();
     this.setState({
-      user: result,
+      user: userDataSession,
       connectionState: "done"
     });
   }
   render() {
     const { user, connectionState } = this.state;
-    console.log(connectionState);
     if (connectionState === "done") {
       if (user === null) {
         return <Router store={store} />;

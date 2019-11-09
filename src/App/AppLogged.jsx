@@ -1,16 +1,20 @@
-import React,{ Component } from 'react';
-export default class App extends Component{
-  render(){
-    const {user} = this.props;
-
-    return(
+import React, { Component } from "react";
+export default class App extends Component {
+  render() {
+    const { user } = this.props;
+    const gender = "Bienvenido/a";
+    const posterWelcome = "/images/draw_welcoming.svg";
+    return (
       <div className="container my-5">
-        {user.gender === "M" ? <p>Bienvenido, {user.fullname}</p> : <p>Bienvenida, {user.fullname}</p>}
-        {user.permissions.map(listPermission)}
+        <div className="row align-items-center">
+          <div className="col">
+            <img className="img-fluid" src={posterWelcome} alt="" />
+          </div>
+          <div className="col text-center">
+            <h1>{gender +" "+ user.fullname}</h1>
+          </div>
+        </div>
       </div>
     );
   }
-};
-function listPermission(permission,key){
-  return <p key={key}>{permission}</p>
 }

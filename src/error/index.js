@@ -1,8 +1,6 @@
-import NotFound from './E404';
-import NotFoundLogged from './E404Logged';
-import Permission from './PERMISSION';
+import NotFound from "./E404";
+import NotFoundLogged from "./E404Logged";
 export default {
   NotFound,
-  NotFoundLogged,
-  Permission
+  NotFoundLogged
 };

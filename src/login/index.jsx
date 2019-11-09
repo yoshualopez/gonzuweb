@@ -4,12 +4,14 @@ import lengthValidator from "validator/lib/isLength";
 import component from "../components";
 import style from "./presets";
 import preset from "../presets";
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       site: "",
       errorMessage: "",
+      tokenMessage: "",
       formEmail: null,
       formPassword: null
     };
@@ -32,14 +34,21 @@ export default class Login extends Component {
       email: this.email.value,
       password: this.password.value
     };
-    const headers = { UserAgent: "GonzuWeb"};
+    const headers = { UserAgent: "GonzuWeb" };
     const endpoint = "loggin";
-    const response = await component.net.post(endpoint,body,headers);
-    console.log(response);
-    if(response.data.error.toString().length > 0){
+    const response = await component.net.post(endpoint, body, headers);
+    if (response.isError) {
       return this.setState({
-        errorMessage: response.data.error
+        errorMessage: response.data
       });
+    }
+    if (!response.data.data.auth) {
+      return this.setState({
+        errorMessage: response.data.data.error
+      });
+    }
+    if (response.data.data.auth) {
+      return component.auth.subscribe({ user: response.data.data.response });
     }
     return this.setState({
       errorMessage: ""
@@ -59,7 +68,7 @@ export default class Login extends Component {
   };
   validatorPassword = () => {
     const password = this.password.value;
-    const isCorrect = lengthValidator(password, { min: 5 });
+    const isCorrect = lengthValidator(password, { min: 2 });
     if (!isCorrect) {
       return this.setState({
         formPassword: false
@@ -85,43 +94,55 @@ export default class Login extends Component {
       emailStatus = style.inputWrong;
     }
     return (
-      <div className="my-5 container d-flex justify-content-center">
-        <form className="text-center" spellCheck="false" onSubmit={this.formSubmit}>
-          <h1>Ingresar</h1>
-          <p className="pt-3">Correo</p>
-          <input
-            onBlur={this.validatorEmail}
-            onPaste={this.validatorEmail}
-            onChange={
-              this.state.formEmail === false ? this.validatorEmail : null
-            }
-            style={emailStatus}
-            ref={e => (this.email = e)}
-            type="email"
-            placeholder="loren@ipsum.com"
-          />
-          <p className="pt-3">Contrase&ntilde;a</p>
-          <input
-            onBlur={this.validatorPassword}
-            onPaste={this.validatorPassword}
-            onChange={this.validatorPassword}
-            style={passwordStatus}
-            ref={e => (this.password = e)}
-            type="password"
-            placeholder="example**"
-          />
+      <div className="my-5 container">
+        <div className="row align-items-center">
+          <div className="col">
+            <img className="img-fluid" src="/images/authentication_login.svg" />
+          </div>
+          <div className="col-md-6 ">
+            <form className="container px-5 text-center" spellCheck="false" onSubmit={this.formSubmit}>
+              <h1>Ingresar</h1>
+              <p className="pt-3">Correo</p>
+              <input
+                onBlur={this.validatorEmail}
+                onPaste={this.validatorEmail}
+                className="form-control"
+                onChange={this.state.formEmail === false ? this.validatorEmail : null}
+                style={emailStatus}
+                ref={e => (this.email = e)}
+                type="email"
+                placeholder="loren@ipsum.com"
+              />
+              <p className="pt-3">Contrase&ntilde;a</p>
+              <input
+                onBlur={this.validatorPassword}
+                onPaste={this.validatorPassword}
+                onChange={this.validatorPassword}
+                className="form-control"
+                style={passwordStatus}
+                ref={e => (this.password = e)}
+                type="password"
+                placeholder="example**"
+              />
 
-          {this.state.errorMessage && 
-          <div className="mt-3 alert alert-warning">
-            <p className="mb-0">{this.state.errorMessage}</p>
+              {this.state.errorMessage && (
+                <div className="mt-3 alert alert-warning">
+                  <p className="mb-0">{this.state.errorMessage}</p>
+                </div>
+              )}
+              {this.state.tokenMessage && (
+                <div className="mt-3 alert alert-info">
+                  <p className="mb-0">{this.state.tokenMessage}</p>
+                </div>
+              )}
+              <div className="text-center py-3">
+                <button className="btn" style={preset.button.buttonPrimary} type="submit">
+                  Siguiente
+                </button>
+              </div>
+            </form>
           </div>
-          }
-          <div className="text-center py-3">
-            <button className="btn" style={preset.button.buttonPrimary} type="submit">
-              Siguiente
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     );
   }

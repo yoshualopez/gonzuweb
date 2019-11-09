@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import socket from '../socket';
 
-socket.on("replymessage",(data) =>{
+socket.on("message",(data) =>{
   console.log("RECIVE MESSAGE => ",data)
 });
 class Chat extends Component{
