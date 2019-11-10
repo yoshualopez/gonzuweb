@@ -149,7 +149,8 @@ class TabVote extends Component {
       );
     }
     return (
-      <div>
+      <div style={{ marginTop: "-30px" }} className="text-center">
+        <h3>Seleccionar una lista</h3>
         <div className="card-group row">
           {list.map((lista, key) => {
             const cardActive = this.state.cardSelected === key ? "selected" : "";
@@ -258,3 +259,28 @@ export default {
   TabVote,
   TabConfirmVote
 };
+
+// [
+//   {
+//     electionsYear: "NUMBER: YEAR",
+//     status : "STRING: "["closed","listening","open"],
+//     listWinner : "STRING: LIST NAME",
+//     lists : [
+//       {
+//         coverName : "STRING: NAME LIST EX: Lista A, Lista B...",
+//         nickNameList : "STRING: NICKNAME OR SIGLAS EX: WEB",
+//         nickNameListMeaning : "STRING: PHRASE LIST OR MEANING EX: World Wide Web",
+//         nickLogoUrl : "STRING: IMAGE NETWORK",
+//         integranst : [
+//           {
+//             fullName : "STRING: NAME AND LASTNAME",
+//             course : "NUMBER: NUMBER COURSE STUDY",
+//             position : "STRING:"["president","vpresident","secretary","treasurer"],
+//             age : "NUMBER:"
+//           }
+//         ]
+
+//       }
+//     ]
+//   }
+// ];

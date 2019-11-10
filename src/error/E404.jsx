@@ -5,7 +5,7 @@ import lang from "../lang";
 export default class E404 extends Component {
   render() {
     const defaultLanguajes = "es";
-    const posterNotFound = "/images/not_found.svg";
+    const posterNotFound = "/images/undraw_Taken_if77.svg";
     return (
       <div className="container text-center py-5">
         <div className="row align-items-center">

@@ -12,8 +12,8 @@ export default {
   electionsVote: elections.Vote,
   header: Header,
   superAdmin,
-  chat: Chat.chatLogged,
-  errorNotFound: ErrorC.NotFoundLogged,
+  chat: Chat.chat,
+  errorNotFound: ErrorC.NotFound,
   profile: App.profile,
   profileId: App.profileId
 };

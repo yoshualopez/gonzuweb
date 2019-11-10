@@ -16,7 +16,6 @@ class RouterDom extends Component {
             <Route exact path="/" render={props => <paths.app {...props} />} />
             <Route exact path="/news" render={props => <paths.news {...props} />} />
             <Route exact path="/news/:id" render={props => <paths.newsId {...props} />} />
-            <Route exact path="/chat" render={props => <paths.chat {...props} />} />
             <Route exact path="/login" render={props => <paths.login {...props} />} />
             <Route component={paths.errorNotFound} />
           </Switch>

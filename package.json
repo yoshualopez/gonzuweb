@@ -21,6 +21,7 @@
     "axios": "^0.19.0",
     "css-loader": "^2.1.1",
     "file-loader": "^4.2.0",
+    "nuka-carousel": "^4.5.13",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

@@ -97,7 +97,7 @@ export default class Login extends Component {
       <div className="my-5 container">
         <div className="row align-items-center">
           <div className="col">
-            <img className="img-fluid" src="/images/authentication_login.svg" />
+            <img className="img-fluid" alt="" src="/images/authentication_login.svg" />
           </div>
           <div className="col-md-6 ">
             <form className="container px-5 text-center" spellCheck="false" onSubmit={this.formSubmit}>

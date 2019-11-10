@@ -1,14 +1,13 @@
 import React,{ Component } from 'react';
 import socket from '../socket';
+import templates from '../templates';
 
-socket.on("replymessage",(data) =>{
-  console.log("RECIVE MESSAGE => ",data)
-});
+// socket.on("message",(data) =>{
+//   console.log("RECIVE MESSAGE => ",data)
+// });
 class Chat extends Component{
   constructor(props){
     super(props);
-
-    this.sendMessage = this.sendMessage.bind(this);
     this.inputMessage = React.createRef();
   }
   sendMessage(){
@@ -16,12 +15,7 @@ class Chat extends Component{
     socket.emit("message",message);
   }
   render(){
-    return(
-      <div>
-        <input ref={(e) => this.inputMessage = e} placeholder="webSocket message"/>
-        <button onClick={this.sendMessage} type="button">Enviar</button>
-      </div>
-    );
+    return <templates.Construction/>;
   }
 }
 export default Chat;
