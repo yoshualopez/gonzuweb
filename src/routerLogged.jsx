@@ -15,6 +15,8 @@ export default class RouterDom extends Component {
             <Route exact path="/" render={props => <paths.app user={user} {...props} />} />
             <Route exact path="/chat" render={props => <paths.chat user={user} {...props} />} />
             <Route exact path="/elections" render={props => <paths.elections user={user} {...props} />} />
+            <Route exact path="/elections/campaigncreate" render={props => <paths.campaignCreate user={user} {...props} />} />
+            <Route exact path="/elections/campaign" render={props => <paths.campaign user={user} {...props} />} />
             <Route exact path="/elections/vote" render={props => <paths.electionsVote user={user} {...props} />} />
             <Route exact path="/elections/counter" render={props => <paths.electionsWatch user={user} {...props} />} />
             <Route exact path="/profile" render={props => <paths.profile user={user} {...props} />} />

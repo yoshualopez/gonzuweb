@@ -8,6 +8,8 @@ import superAdmin from "./superadmin";
 export default {
   app: App.appLogged,
   elections: elections.Setup,
+  campaign : elections.Campaign.Campaign,
+  campaignCreate : elections.Campaign.CreateCampaign,
   electionsWatch: elections.Watch,
   electionsVote: elections.Vote,
   header: Header,

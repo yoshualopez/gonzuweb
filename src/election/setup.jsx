@@ -7,7 +7,7 @@ const items = [
     bg: "rgb(255, 193, 7)",
     title: "Listas",
     description: "Listado de todas las listas concursantes con sus integrantes y sus propuestas",
-    path: "/elections/listas"
+    path: "/elections/campaign"
   },
   {
     icon: "/images/staditics.svg",
@@ -39,10 +39,10 @@ const cardBuilder = (item, key) => {
   return (
     <div key={key} className="col-sm">
       <Link to={item.path} style={{ backgroundColor: item.bg }} className="card text-white">
-        <img src={item.icon} class="p-3 card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">{item.title}</h5>
-          <p class="card-text">{item.description}</p>
+        <img src={item.icon} className="p-3 card-img-top" alt="..." />
+        <div className="card-body">
+          <h5 className="card-title">{item.title}</h5>
+          <p className="card-text">{item.description}</p>
         </div>
       </Link>
     </div>

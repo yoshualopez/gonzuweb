@@ -1,5 +1,5 @@
 export default {
-  local: "http://192.168.0.101:3000"
+  local: "https://gonzu.herokuapp.com"
 };
 // https://gonzu.herokuapp.com/
 // http://192.168.0.101:3000/

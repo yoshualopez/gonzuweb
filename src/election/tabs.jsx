@@ -8,12 +8,16 @@ class TabPersonalData extends Component {
     this.state = {};
     this.nextTab = this.nextTab.bind(this);
     this.fullname = React.createRef();
+    this.age = React.createRef();
+    this.course = React.createRef();
     this.cardIdenty = React.createRef();
   }
   //this.props.next
   nextTab = () => {
     const data = {
       fullname: this.fullname.value,
+      age: this.age.value,
+      course: this.course.value,
       cardIdenty: this.cardIdenty.value,
       listSelect: null
     };
@@ -51,6 +55,14 @@ class TabPersonalData extends Component {
                 placeholder={lang[defaultLanguaje].exampleCardIDIndicator}
               />
             </div>
+            <div>
+              <h6>AGE :</h6>
+              <input defaultValue={data ? data.age : ""} className="form-control my-3" ref={e => (this.age = e)} type="text" placeholder="18" />
+            </div>
+            <div>
+              <h6>Course :</h6>
+              <input defaultValue={data ? data.course : ""} className="form-control my-3" ref={e => (this.course = e)} type="text" placeholder="3ro BGU" />
+            </div>
           </div>
         </div>
         <div className=" mt-5 d-flex justify-content-center">
@@ -65,55 +77,65 @@ class TabPersonalData extends Component {
 
 const list = [
   {
+    // coverName: "Lista A",
+    // nickNameCover: "L.V.E",
+    // logo: "/",
+
     coverName: "Lista A",
-    nickNameCover: "CFUN",
-    logo: "/IFUG2.jpg",
+    nickNameList: "L.V.E",
+    nickNameListMeaning: "La Voz Estudiantil",
+    nickLogoUrl: "/IFUG2.jpg",
     integrants: [
       {
         fullname: "Diego Flores",
-        position: "Presidente/a",
+        position: "president",
         age: 17
       },
       {
         fullname: "Benjamin Jarrin",
-        position: "Vicepresidente/a",
+        position: "vpresident",
         age: 17
       },
       {
         fullname: "ETC ETC",
-        position: "Secretario/a",
+        position: "secretary",
         age: 17
       },
       {
         fullname: "Carpin Augiro",
-        position: "Tesorero/a",
+        position: "treasurer",
         age: 17
       }
     ]
   },
   {
+    // coverName: "Lista B",
+    // logo: "/IFUG2.jpg",
+    // nickNameCover: "IFUG",
+
     coverName: "Lista B",
-    logo: "/IFUG2.jpg",
-    nickNameCover: "IFUG",
+    nickNameList: "IFUG",
+    nickNameListMeaning: "Igualdad Fuerza Unión Gonzu",
+    nickLogoUrl: "/IFUG2.jpg",
     integrants: [
       {
         fullname: "Melanie Valenzuela",
-        position: "Presidente/a",
+        position: "president",
         age: 17
       },
       {
         fullname: "Omar Ronquillo",
-        position: "Vicepresidente/a",
+        position: "vpresident",
         age: 17
       },
       {
         fullname: "Sofía Quinapaxi",
-        position: "Secretario/a",
+        position: "secretary",
         age: 17
       },
       {
         fullname: "Nicole Pérez",
-        position: "Tesorero/a",
+        position: "treasurer",
         age: 17
       }
     ]
@@ -163,10 +185,11 @@ class TabVote extends Component {
                       <div className="row">
                         <div className="col">
                           <h1 className="title">{lista.coverName}</h1>
-                          <h4 className="title">{lista.nickNameCover}</h4>
+                          <h4 className="title">{lista.nickNameList}</h4>
+                          <h3 className="title">{lista.nickNameListMeaning}</h3>
                         </div>
                         <div className="col">
-                          <img className="img-fluid " src={lista.logo} alt="Welcome" />
+                          <img className="img-fluid " src={lista.nickLogoUrl} alt="Welcome" />
                         </div>
                       </div>
                       <div className="col px-0 pt-3">
@@ -174,7 +197,7 @@ class TabVote extends Component {
                           return (
                             <div key={key} className="d-flex align-items-center justify-content-between">
                               <h5 className="description">{integrant.fullname}</h5>
-                              <span className="badge badge-primary">{integrant.position}</span>
+                              <span className="badge badge-primary">{chargeFilter(integrant.position)}</span>
                             </div>
                           );
                         })}
@@ -209,6 +232,22 @@ class TabVote extends Component {
     );
   }
 }
+const chargeFilter = charge => {
+  charge = charge ? charge.toLowerCase() : "unxpected";
+  switch (charge) {
+    case "president":
+      return "Presidente/a";
+    case "vpresident":
+      return "Vicepresidente/a";
+    case "treasurer":
+      return "Tesorero/a";
+    case "secretary":
+      return "Secretario/a";
+    default:
+      return "Unxpected";
+  }
+};
+
 class TabConfirmVote extends Component {
   state = { loading: false };
   render() {
@@ -232,6 +271,22 @@ class TabConfirmVote extends Component {
             </div>
             <div className="col">
               <p>{data ? data.cardIdenty : ""}</p>
+            </div>
+          </div>
+          <div className="row my-3">
+            <div className="col">
+              <h4>Age</h4>
+            </div>
+            <div className="col">
+              <p>{data ? data.age : ""}</p>
+            </div>
+          </div>
+          <div className="row my-3 ">
+            <div className="col">
+              <h4>Course</h4>
+            </div>
+            <div className="col">
+              <p>{data ? data.course : ""}</p>
             </div>
           </div>
           <div className="my-3 d-flex justify-content-center">{data && <h3 className="text-white p-3 bg-success rounded shadow">{data.listSelect.coverName}</h3>}</div>
