@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TabsElection from "./tabs";
+import components from "../components";
 import templates from "../templates";
 
 class Vote extends Component {
@@ -14,8 +15,9 @@ class Vote extends Component {
   }
   componentDidMount() {
     const tabs = [
-      <TabsElection.TabPersonalData personalData={() => this.state.personalData} next={personalData => this.setState({ personalData, index: this.state.index + 1 })} />,
+      <TabsElection.TabPersonalData user={this.props.user} personalData={() => this.state.personalData} next={personalData => this.setState({ personalData, index: this.state.index + 1 })} />,
       <TabsElection.TabVote
+        user={this.props.user}
         next={personalData => this.setState({ personalData, index: this.state.index + 1 })}
         personalData={() => this.state.personalData}
         back={personalData => this.setState({ personalData, index: this.state.index ? this.state.index - 1 : 1 - 1 })}
@@ -28,9 +30,17 @@ class Vote extends Component {
     ];
     this.setState({ tabs });
   }
-  voteAction = (data, callback) => {
-    console.log(data);
+  voteAction = async (data, callback) => {
     callback(true);
+    const body = data;
+    const headers = {"x-access-token" : this.props.user.token};
+    const response = await components.net.post("/defray",body,headers);
+    if(response.isError){
+        return callback(false);
+    }
+    return this.setState({
+        index : 0
+    });
   };
   render() {
     const { index, tabs } = this.state;
