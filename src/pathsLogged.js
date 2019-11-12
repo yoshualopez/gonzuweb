@@ -9,6 +9,7 @@ export default {
   app: App.appLogged,
   elections: elections.Setup,
   campaign : elections.Campaign.Campaign,
+  campaignEdit : elections.EditCampaign,
   campaignCreate : elections.Campaign.CreateCampaign,
   electionsWatch: elections.Watch,
   electionsVote: elections.Vote,

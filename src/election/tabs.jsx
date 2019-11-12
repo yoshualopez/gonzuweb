@@ -12,25 +12,7 @@ class TabPersonalData extends Component {
       filter: "ci",
       students: []
     };
-    this.nextTab = this.nextTab.bind(this);
-    this.inputValue = React.createRef();
-
-    this.fullname = React.createRef();
-    this.age = React.createRef();
-    this.course = React.createRef();
-    this.cardIdenty = React.createRef();
   }
-  //this.props.next
-  nextTab = () => {
-    const data = {
-      fullname: this.fullname.value,
-      age: this.age.value,
-      course: this.course.value,
-      cardIdenty: this.cardIdenty.value,
-      listSelect: null
-    };
-    this.props.next(data);
-  };
   selectStudent = student => {
     this.props.next(student);
   };
@@ -41,7 +23,6 @@ class TabPersonalData extends Component {
     const headers = { "x-access-token": this.props.user.token };
     if (this.state.filter === "ci") {
       const response = await components.net.post("/student/ci", body, headers);
-      console.log(response.data.data);
       if (response.isError) {
       }
       if (response.data.data.auth) {
@@ -117,6 +98,9 @@ class TabPersonalData extends Component {
                         {student.enrollmentcode}
                       </p>
                     </Card.Body>
+                    <Card.Footer className="bg-primary text-white text-right">
+                      {lang[defaultLanguaje].buttonNextIndicator}
+                    </Card.Footer>
                   </Card>
                 );
               })}
@@ -151,7 +135,7 @@ class TabVote extends Component {
       return console.log(response.response);
     }
     return this.setState({
-      lists: response.response[0].lists,
+      lists: response.response[0].lists.reverse(),
       campaign: response.response[0]
     });
   };
@@ -160,7 +144,7 @@ class TabVote extends Component {
     if (this.state.cardSelected === null) return;
     const userCover = this.props.personalData();
     userCover.listSelect = this.state.lists[this.state.cardSelected];
-    this.props.next(userCover,this.state.campaign);
+    this.props.next(userCover, this.state.campaign);
   };
   render() {
     const { personalData } = this.props;
@@ -177,15 +161,31 @@ class TabVote extends Component {
     return (
       <div style={{ marginTop: "-30px" }} className="text-center">
         <h3>Seleccionar una lista</h3>
+        <div className="d-flex justify-content-between">
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => this.props.back(data)}
+          >
+            {lang[defaultLanguaje].buttonBackIndicator}
+          </button>
+          {areDontListSelected ? (
+            <button className="btn btn-outline-success" onClick={null}>
+              {lang[defaultLanguaje].buttonNextIndicator}
+            </button>
+          ) : (
+            <button className="btn btn-success" onClick={this.vote}>
+              {lang[defaultLanguaje].buttonNextIndicator}
+            </button>
+          )}
+        </div>
         <div className="card-group row">
           {this.state.lists.map((lista, key) => {
             const cardActive =
               this.state.cardSelected === key ? "selected" : "";
             const className = "selectable " + cardActive;
-            console.log("LISTA => ", lista);
             if (lista.type === "nulo") {
               return (
-                <div key={key} className="col-lg">
+                <div key={key} className="col-lg-12">
                   <div
                     style={{ border: "none" }}
                     onClick={() => this.cardSelect(key)}
@@ -268,7 +268,7 @@ class TabVote extends Component {
             );
           })}
         </div>
-        <div className="d-flex justify-content-between">
+        {/* <div className="d-flex justify-content-between">
           <button
             className="btn btn-outline-primary"
             onClick={() => this.props.back(data)}
@@ -284,7 +284,7 @@ class TabVote extends Component {
               {lang[defaultLanguaje].buttonNextIndicator}
             </button>
           )}
-        </div>
+        </div> */}
       </div>
     );
   }

@@ -16,7 +16,7 @@ class Header extends Component {
             U.E Cardenal Gonzalez Zumarraga
           </p>
           {user ? (
-            <button onClick={this.logout.bind(this)} className="btn btn-outline-danger">
+            <button onClick={this.logout.bind(this)} className="btn btn-danger">
               Salir
             </button>
           ) : (

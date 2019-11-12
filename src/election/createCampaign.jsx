@@ -57,10 +57,14 @@ class CreateCampaign extends Component {
     return this.props.history.goBack();
   };
   updateCandidate = data => {
-    this.state.lists[this.state.cardSelectPosition] = data;
-    this.setState({
-      lists: this.state.lists,
-      cardSelected: false
+    
+    this.setState((state) =>{
+
+    state.lists[state.cardSelectPosition] = data;
+      return {lists : state.lists,cardSelected: false};
+      // state : this.state,
+      // lists: this.state.lists,
+      // cardSelected: false
     });
   };
   openAddCandidate = () =>

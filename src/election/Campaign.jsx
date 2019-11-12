@@ -1,15 +1,23 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import templates from "../templates";
 import localTemplate from "./template";
 import lang from "../lang";
 import CreateCampaign from "./createCampaign";
 
 class Campaign extends Component {
-  state = { connectionState: "loading", data: {}, error: "", connection: { done: "done", fail: "fail", loading: "loading" } };
+  state = {
+    connectionState: "loading",
+    data: {},
+    error: "",
+    connection: { done: "done", fail: "fail", loading: "loading" }
+  };
   async componentDidMount() {
     const { connection } = this.state;
-    const dataCampaign = await localTemplate.campaign.get(this.props.user.token);
+    const dataCampaign = await localTemplate.campaign.get(
+      this.props.user.token
+    );
     if (dataCampaign.isError) {
       return this.setState({
         connectionState: connection.fail,
@@ -34,7 +42,9 @@ class Campaign extends Component {
       return (
         <div className="container text-center my-5">
           <localTemplate.CreateCampaignButton endpoint="/elections/campaigncreate" />
-          <div className="row justify-content-center align-items-center">{data.map(campaignMapper)}</div>
+          <div className="row justify-content-center align-items-center">
+            {data.map(campaignMapper)}
+          </div>
         </div>
       );
     }
@@ -47,19 +57,22 @@ class Campaign extends Component {
 }
 const campaignMapper = (data, key) => {
   return (
-    <Card bg="success" onClick={null} key={key}>
-      <Card.Title className="text-white p-3">
-        Elecciones {new Date(data.electionYear).getFullYear()} - {new Date(data.electionYear).getFullYear() + 1}
-      </Card.Title>
-      {/* <Card.Subtitle>Subtitle</Card.Subtitle> */}
-      <Card.Body className="text-white">
-        <p>{data.lists.length} listas concursantes</p>
-        {statusFilter(data.status)}
-      </Card.Body>
-      <Card.Footer className="text-white">
-        <h5>{data.votes.length} votos totales</h5>
-      </Card.Footer>
-    </Card>
+    <Link key={key} className="text-decoration-none" to={"/elections/campaign/" + data._id}>
+      <Card bg="success">
+        <Card.Title className="text-white p-3">
+          Elecciones {new Date(data.electionYear).getFullYear()} -{" "}
+          {new Date(data.electionYear).getFullYear() + 1}
+        </Card.Title>
+        {/* <Card.Subtitle>Subtitle</Card.Subtitle> */}
+        <Card.Body className="text-white">
+          <p>{data.lists.length} listas concursantes</p>
+          {statusFilter(data.status)}
+        </Card.Body>
+        <Card.Footer className="text-white">
+          <h5>{data.votes.length} votos totales</h5>
+        </Card.Footer>
+      </Card>
+    </Link>
   );
 };
 const statusFilter = (status = "") => {
@@ -71,7 +84,9 @@ const statusFilter = (status = "") => {
     case "closed":
       return <p className="bg-danger rounded py-2">Cerrado</p>;
     default:
-      return <p className="bg-warning rounded py-2">{lang.es.unxpectedError}</p>;
+      return (
+        <p className="bg-warning rounded py-2">{lang.es.unxpectedError}</p>
+      );
   }
 };
 

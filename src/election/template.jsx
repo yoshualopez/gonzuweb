@@ -171,7 +171,7 @@ const modalCandidate = (
 };
 
 const modalSelectType = (data, whenShow, actionClose, action, error) => {
-  const defaultLanguaje = "es";
+  // const defaultLanguaje = "es";
   data.integrants = data.integrants
     ? data.integrants
     : [
