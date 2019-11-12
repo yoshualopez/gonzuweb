@@ -9,6 +9,7 @@ class Vote extends Component {
     this.state = {
       index: 0,
       tabs: null,
+      campaign : {},
       personalData: null
     };
     this.voteAction = this.voteAction.bind(this);
@@ -18,7 +19,7 @@ class Vote extends Component {
       <TabsElection.TabPersonalData user={this.props.user} personalData={() => this.state.personalData} next={personalData => this.setState({ personalData, index: this.state.index + 1 })} />,
       <TabsElection.TabVote
         user={this.props.user}
-        next={personalData => this.setState({ personalData, index: this.state.index + 1 })}
+        next={(personalData,campaign) => this.setState({ personalData, campaign,index: this.state.index + 1 })}
         personalData={() => this.state.personalData}
         back={personalData => this.setState({ personalData, index: this.state.index ? this.state.index - 1 : 1 - 1 })}
       />,
@@ -32,7 +33,11 @@ class Vote extends Component {
   }
   voteAction = async (data, callback) => {
     callback(true);
-    const body = data;
+    const body = {
+      user : data,
+      campaign : this.state.campaign,
+      listSelect : data.listSelect
+    };
     const headers = {"x-access-token" : this.props.user.token};
     const response = await components.net.post("/defray",body,headers);
     if(response.isError){

@@ -28,19 +28,40 @@ const chargeFilter = charge => {
       return "Unxpected";
   }
 };
-const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
+const modalCandidate = (
+  data,
+  modalShow,
+  closeModal,
+  save,
+  modalError,
+  toHide
+) => {
   const defaultLanguaje = "es";
-  data.integrants = data.integrants ? data.integrants : [{ position: "president" }, { position: "vpresident" }, { position: "secretary" }, { position: "treasurer" }];
+  data.integrants = data.integrants
+    ? data.integrants
+    : [
+        { position: "president" },
+        { position: "vpresident" },
+        { position: "secretary" },
+        { position: "treasurer" }
+      ];
+  data.type = "candidate";
   return (
-    <Modal show={modalShow} onHide={closeModal}>
+    <Modal show={modalShow} onHide={() => closeModal(toHide)}>
       <Modal.Header closeButton>
-        <Modal.Title>Candidato {lang[defaultLanguaje].fieldAbreviationSchoolName}</Modal.Title>
+        <Modal.Title>
+          Candidato {lang[defaultLanguaje].fieldAbreviationSchoolName}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Row className="py-3">
           <Col>Candidato</Col>
           <Col>
-            <select defaultValue={data.coverName} onChange={e => (data.coverName = e.target.value)} className="custom-select">
+            <select
+              defaultValue={data.coverName}
+              onChange={e => (data.coverName = e.target.value)}
+              className="custom-select"
+            >
               <option value={""}></option>
               {candidates.map((item, key) => {
                 return (
@@ -56,13 +77,23 @@ const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
         <Row className="py-3">
           <Col>{lang[defaultLanguaje].tolltipInitialsCampaign}</Col>
           <Col>
-            <input className="form-control" onChange={e => (data.nickNameList = e.target.value)} defaultValue={data.nickNameList} type="text" />
+            <input
+              className="form-control"
+              onChange={e => (data.nickNameList = e.target.value)}
+              defaultValue={data.nickNameList}
+              type="text"
+            />
           </Col>
         </Row>
         <Row className="py-3">
           <Col>Significado iniciales</Col>
           <Col>
-            <input className="form-control" onChange={e => (data.nickNameListMeaning = e.target.value)} defaultValue={data.nickNameListMeaning} type="text" />
+            <input
+              className="form-control"
+              onChange={e => (data.nickNameListMeaning = e.target.value)}
+              defaultValue={data.nickNameListMeaning}
+              type="text"
+            />
           </Col>
         </Row>
         {data.integrants.map((item, key) => {
@@ -75,13 +106,22 @@ const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
                 <Row className="py-2">
                   <Col>Nombre</Col>
                   <Col>
-                    <input className="form-control" onChange={e => (item.fullname = e.target.value)} defaultValue={item.fullname} type="text" />
+                    <input
+                      className="form-control"
+                      onChange={e => (item.fullname = e.target.value)}
+                      defaultValue={item.fullname}
+                      type="text"
+                    />
                   </Col>
                 </Row>
                 <Row className="py-2">
                   <Col>Edad</Col>
                   <Col>
-                    <select defaultValue={item.age} onChange={e => (item.age = e.target.value)} className="custom-select">
+                    <select
+                      defaultValue={item.age}
+                      onChange={e => (item.age = e.target.value)}
+                      className="custom-select"
+                    >
                       <option value=""></option>
                       {ageIntegrants.map((item, key) => {
                         return (
@@ -96,7 +136,11 @@ const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
                 <Row className="py-2">
                   <Col>Curso</Col>
                   <Col>
-                    <select defaultValue={item.course} onChange={e => (item.course = e.target.value)} className="custom-select">
+                    <select
+                      defaultValue={item.course}
+                      onChange={e => (item.course = e.target.value)}
+                      className="custom-select"
+                    >
                       <option value=""></option>
                       {coursesList.map((item, key) => {
                         return (
@@ -115,7 +159,7 @@ const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
         {modalError && <Alert variant="warning">{modalError}</Alert>}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={closeModal}>
+        <Button variant="secondary" onClick={() => closeModal(toHide)}>
           {lang[defaultLanguaje].buttonCloseIndicator}
         </Button>
         <Button variant="primary" onClick={() => save(data)}>
@@ -125,6 +169,41 @@ const modalCandidate = (data, modalShow, closeModal, save, modalError) => {
     </Modal>
   );
 };
+
+const modalSelectType = (data, whenShow, actionClose, action, error) => {
+  const defaultLanguaje = "es";
+  data.integrants = data.integrants
+    ? data.integrants
+    : [
+        { position: "president" },
+        { position: "vpresident" },
+        { position: "secretary" },
+        { position: "treasurer" }
+      ];
+  return (
+    <Modal show={whenShow} onHide={actionClose}>
+      <Modal.Body>
+        <Row>
+          <Col>
+            <Card onClick={() => action("addListShow")}>
+              <Card.Body>
+                <h4>Candidato</h4>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col>
+            <Card onClick={() => action("createnulo")}>
+              <Card.Body>
+                <h4>Nulo</h4>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
 const campaign = {
   get: async (token = "") => {
     try {
@@ -153,7 +232,11 @@ const campaign = {
       const endpoint = "/createcampaign";
       const headers = { "x-access-token": token };
       const response = { isError: false, response: {} };
-      const connectionsState = await components.net.post(endpoint, body, headers);
+      const connectionsState = await components.net.post(
+        endpoint,
+        body,
+        headers
+      );
       if (connectionsState.isError) {
         response.isError = connectionsState.isError;
         response.response = connectionsState.data;
@@ -171,14 +254,53 @@ const campaign = {
     }
   }
 };
-const ageIntegrants = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
-const candidates = ["Lista A", "Lista B", "Lista C", "Lista D", "Lista E", "Lista F"];
-const coursesList = ["1ro EBG", "2do EBG", "3ro EBG", "4to EGB", "5to EGB", "6to EGB", "7mo EGB", "8vo EGB", "9no EGB", "10mo EGB", "1ro BGU", "2do BGU", "3ro BGU"];
+const ageIntegrants = [
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22
+];
+const candidates = [
+  "Lista A",
+  "Lista B",
+  "Lista C",
+  "Lista D",
+  "Lista E",
+  "Lista F"
+];
+const coursesList = [
+  "1ro EBG",
+  "2do EBG",
+  "3ro EBG",
+  "4to EGB",
+  "5to EGB",
+  "6to EGB",
+  "7mo EGB",
+  "8vo EGB",
+  "9no EGB",
+  "10mo EGB",
+  "1ro BGU",
+  "2do BGU",
+  "3ro BGU"
+];
 export default {
   CreateCampaignButton,
   coursesList,
   candidates,
   modalCandidate,
+  modalSelectType,
   ageIntegrants,
   campaign,
   chargeFilter
