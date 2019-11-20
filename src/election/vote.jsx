@@ -9,42 +9,69 @@ class Vote extends Component {
     this.state = {
       index: 0,
       tabs: null,
-      campaign : {},
+      campaign: {},
       personalData: null
     };
     this.voteAction = this.voteAction.bind(this);
   }
   componentDidMount() {
+    const { user } = this.props;
+    const { index } = this.state;
     const tabs = [
-      <TabsElection.TabPersonalData user={this.props.user} personalData={() => this.state.personalData} next={personalData => this.setState({ personalData, index: this.state.index + 1 })} />,
-      <TabsElection.TabVote
-        user={this.props.user}
-        next={(personalData,campaign) => this.setState({ personalData, campaign,index: this.state.index + 1 })}
+      <TabsElection.TabSelectCampaign
+        user={user}
+        next={(personalData, campaign) =>
+          this.setState({ personalData, campaign, index: this.state.index + 1 })
+        }
+      />,
+      <TabsElection.TabPersonalData
+        user={user}
+        campaign={() => this.state.campaign}
         personalData={() => this.state.personalData}
-        back={personalData => this.setState({ personalData, index: this.state.index ? this.state.index - 1 : 1 - 1 })}
+        next={personalData =>
+          this.setState({ personalData, index: this.state.index + 1 })
+        }
+      />,
+      <TabsElection.TabVote
+        user={user}
+        campaign={() => this.state.campaign}
+        next={(personalData, campaign) =>
+          this.setState({ personalData, campaign, index: this.state.index + 1 })
+        }
+        personalData={() => this.state.personalData}
+        back={personalData =>
+          this.setState({
+            personalData,
+            index: this.state.index ? this.state.index - 1 : 1 - 1
+          })
+        }
       />,
       <TabsElection.TabConfirmVote
         confirm={this.voteAction}
         personalData={() => this.state.personalData}
-        back={() => this.setState({ index: this.state.index ? this.state.index - 1 : 1 - 1 })}
+        back={() =>
+          this.setState({
+            index: this.state.index ? this.state.index - 1 : 1 - 1
+          })
+        }
       />
     ];
     this.setState({ tabs });
   }
-  voteAction = async (data, callback) => {
-    callback(true);
+  voteAction = async (data, buttonIsLoadding) => {
+    buttonIsLoadding(true);
     const body = {
-      user : data,
-      campaign : this.state.campaign,
-      listSelect : data.listSelect
+      user: data,
+      campaign: this.state.campaign,
+      listSelect: data.listSelect
     };
-    const headers = {"x-access-token" : this.props.user.token};
-    const response = await components.net.post("/defray",body,headers);
-    if(response.isError){
-        return callback(false);
+    const headers = { "x-access-token": this.props.user.token };
+    const response = await components.net.post("/defray", body, headers);
+    if (response.isError) {
+      return buttonIsLoadding(false);
     }
     return this.setState({
-        index : 0
+      index: 0
     });
   };
   render() {

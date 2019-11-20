@@ -56,8 +56,30 @@ class Campaign extends Component {
   }
 }
 const campaignMapper = (data, key) => {
+  if (data.status === "closed") {
+    return (
+      <Card bg="success" key={key}>
+        <Card.Title className="text-white p-3">
+          Elecciones {new Date(data.electionYear).getFullYear()} -{" "}
+          {new Date(data.electionYear).getFullYear() + 1}
+        </Card.Title>
+        {/* <Card.Subtitle>Subtitle</Card.Subtitle> */}
+        <Card.Body className="text-white">
+          <p>{data.lists.length} listas concursantes</p>
+          {statusFilter(data.status)}
+        </Card.Body>
+        <Card.Footer className="text-white">
+          <h5>{data.votes[0]} votos totales</h5>
+        </Card.Footer>
+      </Card>
+    );
+  }
   return (
-    <Link key={key} className="text-decoration-none" to={"/elections/campaign/" + data._id}>
+    <Link
+      key={key}
+      className="text-decoration-none"
+      to={"/elections/campaign/" + data._id}
+    >
       <Card bg="success">
         <Card.Title className="text-white p-3">
           Elecciones {new Date(data.electionYear).getFullYear()} -{" "}
@@ -69,7 +91,7 @@ const campaignMapper = (data, key) => {
           {statusFilter(data.status)}
         </Card.Body>
         <Card.Footer className="text-white">
-          <h5>{data.votes.length} votos totales</h5>
+          <h5>{data.votes[0]} votos totales</h5>
         </Card.Footer>
       </Card>
     </Link>

@@ -24,7 +24,6 @@ class News extends Component {
         </div>
       );
     }
-    console.log(this.state.news);
     return (
       <div className="my-5 container">
         <div className="jumbotron">

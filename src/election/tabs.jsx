@@ -1,10 +1,61 @@
 import React, { Component } from "react";
 import lang from "../lang";
-import { Card } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 import components from "../components";
 import templates from "../templates";
 import localTemplates from "./template";
 
+class TabSelectCampaign extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { campaigns: [] };
+  }
+  componentDidMount = () => this.getCampaigns();
+  getCampaigns = async () => {
+    const response = await localTemplates.campaign.get(this.props.user.token);
+    if (response.isError) {
+      return console.log(response.response);
+    }
+    return this.setState({
+      campaigns: response.response
+    });
+  };
+  nextTab = (campaign, key) => {
+    this.props.next(this.props.user, campaign);
+  };
+  render() {
+    const defaultLanguaje = "es";
+    return (
+      <Container className="col-md">
+        <div className="row">
+          {this.state.campaigns.map((campaign, key) => {
+            if (campaign.status === "listen") {
+              return (
+                <Card
+                  onClick={() => this.nextTab(campaign, key)}
+                  bg="primary"
+                  key={key}
+                >
+                  <Card.Body className="text-white">
+                    <Card.Title>
+                      {new Date(campaign.electionYear).getFullYear()} -{" "}
+                      {new Date(campaign.electionYear).getFullYear() + 1}
+                    </Card.Title>
+                    <p>
+                      <strong>Estado: </strong>
+                      {campaign.status}
+                    </p>
+                  </Card.Body>
+                </Card>
+              );
+            }
+            return null;
+          })}
+        </div>
+      </Container>
+    );
+  }
+}
 class TabPersonalData extends Component {
   constructor(props) {
     super(props);
@@ -98,7 +149,7 @@ class TabPersonalData extends Component {
                         {student.enrollmentcode}
                       </p>
                     </Card.Body>
-                    <Card.Footer className="bg-primary text-white text-right">
+                    <Card.Footer className="bg-primary text-white text-center">
                       {lang[defaultLanguaje].buttonNextIndicator}
                     </Card.Footer>
                   </Card>
@@ -106,11 +157,6 @@ class TabPersonalData extends Component {
               })}
           </div>
         </div>
-        {/* <div className=" mt-5 d-flex justify-content-center">
-          <button className="btn btn-outline-primary" onClick={this.nextTab}>
-            {lang[defaultLanguaje].buttonNextIndicator}
-          </button>
-        </div> */}
       </div>
     );
   }
@@ -130,13 +176,10 @@ class TabVote extends Component {
   }
   componentDidMount = () => this.getList();
   getList = async () => {
-    const response = await localTemplates.campaign.get(this.props.user.token);
-    if (response.isError) {
-      return console.log(response.response);
-    }
+    const campaign = this.props.campaign();
     return this.setState({
-      lists: response.response[0].lists.reverse(),
-      campaign: response.response[0]
+      lists: campaign.lists.reverse(),
+      campaign: campaign
     });
   };
   cardSelect = card => this.setState({ cardSelected: card });
@@ -268,23 +311,6 @@ class TabVote extends Component {
             );
           })}
         </div>
-        {/* <div className="d-flex justify-content-between">
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => this.props.back(data)}
-          >
-            {lang[defaultLanguaje].buttonBackIndicator}
-          </button>
-          {areDontListSelected ? (
-            <button className="btn btn-outline-success" onClick={null}>
-              {lang[defaultLanguaje].buttonNextIndicator}
-            </button>
-          ) : (
-            <button className="btn btn-success" onClick={this.vote}>
-              {lang[defaultLanguaje].buttonNextIndicator}
-            </button>
-          )}
-        </div> */}
       </div>
     );
   }
@@ -310,7 +336,6 @@ class TabConfirmVote extends Component {
     const { personalData } = this.props;
     const data = personalData();
     const defaultLanguaje = "es";
-    console.log("DATA => ", data);
     return (
       <div className="text-center">
         <div className="container mb-3">
@@ -392,6 +417,7 @@ class TabConfirmVote extends Component {
   }
 }
 export default {
+  TabSelectCampaign,
   TabPersonalData,
   TabVote,
   TabConfirmVote
